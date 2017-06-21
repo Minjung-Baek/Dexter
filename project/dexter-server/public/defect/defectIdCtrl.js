@@ -182,9 +182,9 @@ defectApp.controller('DefectIdCtrl', function($scope, $http, $sce, $location, $a
 
     function setProjectName() {
         defectService.loadProjectName()
-            .then(projectName => {
+            .then(function(projectName) {
                 $scope.projectName = projectName;
-                $('#indexTitle').html(`Defect: ${projectName}`);
+                $('#indexTitle').html("Defect: "+ projectName);
             })
     }
 

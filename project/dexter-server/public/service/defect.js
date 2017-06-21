@@ -65,9 +65,9 @@ defectApp.service('defectService', function ($http, $q, $location, $log) {
                     projectName = results.data.projectName;
                     return projectName;
                 }
-            }).catch(error => {
+            }).catch(function(error) {
                 $log.error(error);
-                return 'undefined';
+                return '-';
             });
     }
 

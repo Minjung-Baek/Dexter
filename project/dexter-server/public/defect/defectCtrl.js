@@ -273,6 +273,9 @@ defectApp.controller('DefectCtrl', function ($scope, $http, $sce, $location, $an
             }
         }).then(function (results) {// success
             if (isHttpResultOK(results)) {
+                if(result.data.rows){
+                    return;
+                }
                 var data = results.data.rows[0];
                 $scope.treeItem = {
                     'name': data.modulePath,
@@ -330,9 +333,13 @@ defectApp.controller('DefectCtrl', function ($scope, $http, $sce, $location, $an
             }
         }).then(function (results) {// success
             if (isHttpResultOK(results)) {
-                if ($scope.fileTreeId.currentNode.children !== [])
+                if ($scope.fileTreeId.currentNode.children !== []) {
                     $scope.fileTreeId.currentNode.children = [];
-
+                }
+                $log.info(results);
+                if(results.data.rows.length ===0){
+                    return;
+                }
                 angular.forEach(results.data.rows, function (data) {
                     $scope.fileTreeId.currentNode.children.push({
                         'name': data.fileName,
@@ -347,8 +354,8 @@ defectApp.controller('DefectCtrl', function ($scope, $http, $sce, $location, $an
                     });
                 });
             }
-        }).catch((error) => {
-            $log.error(error);
+        }).catch(function(error){
+            $log.error(error.message);
         });
     }
 
@@ -376,7 +383,7 @@ defectApp.controller('DefectCtrl', function ($scope, $http, $sce, $location, $an
                     });
                 });
             }
-        }).catch((error) => {
+        }).catch(function(error){
             $log.error(error);
         });
     }
@@ -406,9 +413,9 @@ defectApp.controller('DefectCtrl', function ($scope, $http, $sce, $location, $an
 
     function setProjectName() {
         defectService.loadProjectName()
-            .then(projectName => {
+            .then(function(projectName) {
                 $scope.projectName = projectName;
-                $('#indexTitle').html(`Defect: ${projectName}`);
+                $('#indexTitle').html("Defect:"+ projectName);
             })
     }
 
